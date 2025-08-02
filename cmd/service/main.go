@@ -23,7 +23,7 @@ import (
 func main() {
 	// Initialize logger
 	logger, _ := zap.NewProduction()
-	defer logger.Sync()
+	defer func() { _ = logger.Sync() }()
 
 	// Load configuration
 	if err := loadConfig(); err != nil {
@@ -95,7 +95,7 @@ func main() {
 	// Health check
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		_, _ = w.Write([]byte("OK"))
 	})
 
 	// Ready check
@@ -105,11 +105,11 @@ func main() {
 		_, err := neo4jClient.ExecuteQuery(ctx, "system", query, nil)
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			w.Write([]byte("Neo4j not ready"))
+			_, _ = w.Write([]byte("Neo4j not ready"))
 			return
 		}
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("Ready"))
+		_, _ = w.Write([]byte("Ready"))
 	})
 
 	// API routes
