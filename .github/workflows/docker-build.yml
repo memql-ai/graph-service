@@ -48,7 +48,12 @@ jobs:
       run: go mod verify
 
     - name: Run tests
-      run: go test -v ./...
+      run: |
+        if [ -n "$(find . -name '*_test.go' -type f)" ]; then
+          go test -v ./...
+        else
+          echo "No test files found, skipping tests"
+        fi
 
     - name: Run linter
       uses: golangci/golangci-lint-action@v6
