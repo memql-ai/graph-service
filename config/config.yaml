@@ -1,0 +1,23 @@
+server:
+  address: ":8084"
+  
+neo4j:
+  uri: "bolt://neo4j:7687"
+  username: "neo4j"
+  password: "${NEO4J_PASSWORD}"
+  
+kafka:
+  brokers: "kafka:9092"
+  consumer_group: "graph-service"
+  
+logging:
+  level: "info"
+  format: "json"
+  
+telemetry:
+  enabled: true
+  trace_ratio: 0.1
+  
+cache:
+  query_cache_ttl: "5m"
+  max_cache_size: 1000
